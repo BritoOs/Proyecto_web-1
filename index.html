@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  
+  <link rel="stylesheet" type="text/css" href="css/styles.css"> 
+  <title>PROYECTO</title>
+</head>
+<body>
+
+
+<ul class="products">
+  <h1> BARBER SHOP</h1> 
+    <li>
+      <a href="#" class="item">
+        <!-- Producto 1 --> 
+        <div class="galeria">
+          <img draggable="true" ondragstart="drag(event)" src="img/1.jpg"/> 
+          <p> Barba Larga</p> 
+      
+          <p class="prod-price" id="prod-price" > 
+            <b class="price-strong" >Q 15.50
+            </b> &nbsp;&nbsp; 
+          </p> 
+          <div class="container">
+              <button class="shop-item-button"> Añadir a la cesta</button> 
+          </div>
+        </div>
+
+      </a>
+    </li>
+  
+    <li>
+			<a href="#" class="item">
+				<!-- Producto 2 --> 
+        <div class="galeria">
+          <img draggable="true" ondragstart="drag(event)" src="img/2.jpeg"/> 
+          <p> Corte de Cabello</p> 
+  
+          <p class="prod-price" id="prod-price" > 
+            <b class="price-strong" >Q 25.50
+            </b> &nbsp;&nbsp; 
+          </p> 
+          <div class="container">
+              <button class="shop-item-button"> Añadir a la cesta</button> 
+          </div>
+        </div>
+
+			</a>
+		</li>
+  
+    <li>
+			<a href="#" class="item">
+        <!-- Producto 3 --> 
+				<div class="galeria">
+            <img draggable="true" ondragstart="drag(event)" src="img/3.jpg"/> 
+            <p> Barba Corta</p> 
+      
+            <p class="prod-price" id="prod-price" > 
+              <b class="price-strong" >Q 5.00
+              </b> &nbsp;&nbsp; 
+            </p> 
+            <div class="container">
+                <button class="shop-item-button"> Añadir a la cesta</button> 
+            </div>
+          </div>
+
+			</a>
+		</li>
+
+    <li>
+			<a href="#" class="item">
+        <!-- Producto 3 --> 
+				<div class="galeria">
+            <img draggable="true" ondragstart="drag(event)" src="img/3.jpg"/> 
+            <p> Barba Corta</p> 
+      
+            <p class="prod-price" id="prod-price" > 
+              <b class="price-strong" >Q 5.00
+              </b> &nbsp;&nbsp; 
+            </p> 
+            <div class="container">
+                <button class="shop-item-button"> Añadir a la cesta</button> 
+            </div>
+          </div>
+
+			</a>
+		</li>
+
+    <li>
+			<a href="#" class="item">
+        <!-- Producto 3 --> 
+				<div class="galeria">
+            <img draggable="true" ondragstart="drag(event)" src="img/3.jpg"/> 
+            <p> Barba Corta</p> 
+      
+            <p class="prod-price" id="prod-price" > 
+              <b class="price-strong" >Q 5.00
+              </b> &nbsp;&nbsp; 
+            </p> 
+            <div class="container">
+                <button class="shop-item-button"> Añadir a la cesta</button> 
+            </div>
+          </div>
+
+			</a>
+		</li>
+
+
+
+</ul>
+
+<div class="cart">
+
+      <h1 class="text-center"> TICKET </h1> 
+      <!-- Products --> 
+      <div id="boxes" class="boxes shop-cart" ondragover="allowDrop(event)" ondrop="drop(event)" >
+      </div> 
+      <!-- Cart Items --> 
+      <div class="cart-items"> 
+        <!-- Selected Products goes here --> 
+      </div> 
+      <!-- Price --> 
+      <div class="container">
+      <div class="d-flex justify-contsent-center"> 
+        <div class="cart-total"> 
+          <strong class="cart-total-title">Total 
+          </strong> 
+          <span class="cart-total-price">0 
+          </span> 
+        </div> 
+      </div> 
+      
+      <button class="btn btn-dark btn-purchase">COMPRAR</button> 
+      </div>
+
+	</div>
+
+
+  <script>
+    if (document.readyState == "loading") {
+    document.addEventListener("DOMContentLoaded", ready);
+  } else {
+    ready();
+  }
+  
+  function ready() {
+    var removeCartItemButtons = document.getElementsByClassName("btn-danger");
+  
+    for (let i = 0; i < removeCartItemButtons.length; i++) {
+      const button = removeCartItemButtons[i];
+      button.addEventListener("click", removeCartItem);
+    } 
+    
+    var quantityInputs = document.getElementsByClassName("cart-quantity-input");
+  
+    for (let i = 0; i < quantityInputs.length; i++) {
+      const input = quantityInputs[i];
+      input.addEventListener("change", quantityChanged);
+    }
+    
+    var addToCartButtons = document.getElementsByClassName("shop-item-button");
+    for (let i = 0; i < addToCartButtons.length; i++) {
+      const button = addToCartButtons[i];
+      button.addEventListener("click", addToCartClicked);
+    }
+    
+    document.getElementsByClassName("btn-purchase")[0].addEventListener("click", purchaseClicked);
+  }
+  
+  function quantityChanged(event) {
+    const input = event.target;
+    if (isNaN(input.value) || input.value <= 0) {
+      input.value = 1;
+    }
+    updateCartTotal();
+  }
+  
+  function addToCartClicked(event) {
+    const button = event.target;
+    const shopItem = button.parentElement.parentElement;
+    const title = shopItem.querySelectorAll("p")[0];
+    const productTitle = title.innerText.trim();
+    const price = shopItem.getElementsByClassName("prod-price")[0].innerText;
+    addItemToCart(productTitle, price);
+    updateCartTotal();
+  }
+  
+  function addItemToCart(productTitle, price) {
+    const cartRow = document.createElement("div");
+    cartRow.classList.add("cart-row", "d-flex", "justify-content-between");
+    const cartItems = document.getElementsByClassName("cart-items")[0];
+    const cartItemNames = cartItems.getElementsByClassName("cart-item-title");
+  
+    for (let i = 0; i < cartItemNames.length; i++) {
+      if (cartItemNames[i].innerText == productTitle) {
+        const quantityInputs = document.getElementsByClassName("cart-quantity-input");
+        quantityInputs[i].value++;
+        return;
+      }
+    }
+  
+    const cartRowContents = `
+    <div class="cart-item cart-column">
+      
+    <span class="cart-item-title">${productTitle}</span>
+    <span class="cart-price cart-column">${price}</span>
+
+    <input type="number" value="1" class="cart-quantity-input">
+    <button class="btn btn-danger" type="button">ELIMINAR</button>
+    </div>
+    `;
+    cartRow.innerHTML = cartRowContents;
+    cartItems.append(cartRow);
+    cartRow.getElementsByClassName("btn-danger")[0].addEventListener("click", removeCartItem);
+    cartRow.getElementsByClassName("cart-quantity-input")[0].addEventListener("change", quantityChanged);
+  }
+  
+  function removeCartItem(event) {
+    const buttonClicked = event.target;
+    buttonClicked.parentElement.parentElement.remove();
+    updateCartTotal();
+  }
+  
+  function updateCartTotal() {
+    const cartItemContainer = document.getElementsByClassName("cart-items")[0];
+    const cartRows = cartItemContainer.getElementsByClassName("cart-row");
+    var total = 0;
+  
+    for (let i = 0; i < cartRows.length; i++) {
+      const cartRow = cartRows[i];
+      const priceElement = cartRow.getElementsByClassName("cart-price")[0];
+      const quantityElement = cartRow.getElementsByClassName("cart-quantity-input")[0];
+      const price = parseFloat(priceElement.innerText.replace("Q", ""));
+      const quantity = quantityElement.value;
+      total = total + price * quantity;
+    }
+  
+    total = Math.round(total * 100) / 100;
+    document.getElementsByClassName("cart-total-price")[0].innerText = "Q" + total.toFixed(2);
+  }
+  
+  function purchaseClicked() {
+    alert("Gracias por su compra");
+    const cartItems = document.getElementsByClassName("cart-items")[0];
+    while (cartItems.hasChildNodes()) {
+      cartItems.removeChild(cartItems.firstChild);
+    }
+    updateCartTotal();
+  }
+  
+  const tooltipTriggerList = [].slice.call(
+    document.querySelectorAll('[data-bs-toggle="tooltip"]')
+  );
+  const tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+    return new bootstrap.Tooltip(tooltipTriggerEl);
+  });
+
+  function allowDrop(event) {
+    event.preventDefault();
+  }
+  
+  var pTitle;
+  var pPrice;
+  
+  function drag(event) {
+    const draggableInfo = event.target.parentElement;
+    pTitle = draggableInfo.querySelectorAll("p")[0].innerText.trim();
+    pPrice = draggableInfo.querySelectorAll("p")[1].innerText;
+  }
+  
+  function drop(event) {
+    event.preventDefault();
+    addItemToCart(pTitle, pPrice);
+    updateCartTotal();
+  }
+  </script> 
+
+</body>
+</html>
